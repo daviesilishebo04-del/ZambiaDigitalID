@@ -1,0 +1,135 @@
+/* Login page styles - Zambia national colors */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Full page green background */
+.login-container {
+  min-height: 100vh;
+  background-color: #198A00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* White login card in the center */
+.login-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Coat of arms image */
+.coat-of-arms {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+/* System title */
+.system-title {
+  color: #198A00;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Ministry subtitle */
+.system-subtitle {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* Orange divider line */
+.login-form {
+  border-top: 3px solid #EF7D00;
+  padding-top: 20px;
+}
+
+/* Login heading */
+.login-heading {
+  color: #EF7D00;
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+/* Login subheading */
+.login-subheading {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.input-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #198A00;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #198A00;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background-color: #145f00;
+}
+
+.login-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+/* Forgot password */
+.forgot-password {
+  color: #EF7D00;
+  font-size: 12px;
+  margin-top: 15px;
+}
