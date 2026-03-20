@@ -46,7 +46,7 @@ function Login() {
 
         {/* Zambia Coat of Arms */}
         <img 
-          src='/coat-of-arms.png'
+          src='/coat-of-arms.jpeg'
           alt='Zambia Coat of Arms' 
           className='coat-of-arms'
         />

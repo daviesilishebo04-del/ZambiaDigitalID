@@ -9,6 +9,7 @@ dotenv.config()
 
 // Import routes
 const authRoutes = require('./routes/authRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 // Create our server
 const app = express()
@@ -19,15 +20,16 @@ app.use(cors())
 // Allow server to read JSON data
 app.use(express.json())
 
-// Test route - just to check server is running
+// Test route
 app.get('/', (req, res) => {
   res.json({ message: 'Zambia Digital ID System is running!' })
 })
 
-// Authentication routes
+// Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/admin', adminRoutes)
 
-// Start the server on port 5000
+// Start server
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
