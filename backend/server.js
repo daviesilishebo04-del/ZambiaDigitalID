@@ -10,6 +10,7 @@ dotenv.config()
 // Import routes
 const authRoutes = require('./routes/authRoutes')
 const adminRoutes = require('./routes/adminRoutes')
+const hospitalRoutes = require('./routes/hospitalRoutes')
 
 // Create our server
 const app = express()
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/hospital', hospitalRoutes)
 
 // Start server
 const PORT = process.env.PORT || 5000

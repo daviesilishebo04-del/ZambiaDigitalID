@@ -5,7 +5,6 @@ import axios from 'axios'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
-  // Store data
   const [users, setUsers] = useState([])
   const [stats, setStats] = useState({
     totalCitizens: 0,
@@ -14,19 +13,23 @@ function AdminDashboard() {
     totalDeaths: 0
   })
   const [activeTab, setActiveTab] = useState('dashboard')
-  const [auditLogs, setAuditLogs] = useState([])
+  const [newUser, setNewUser] = useState({
+    full_name: '',
+    username: '',
+    email: '',
+    password: '',
+    role: 'officer'
+  })
 
-  // Get user info from localStorage
   const user = JSON.parse(localStorage.getItem('user') || '{}')
   const token = localStorage.getItem('token')
 
-  // Load data when page opens
   useEffect(() => {
     fetchStats()
     fetchUsers()
+    fetchAuditLogs()
   }, [])
 
-  // Get system statistics
   const fetchStats = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/admin/stats', {
@@ -38,7 +41,6 @@ function AdminDashboard() {
     }
   }
 
-  // Get all users
   const fetchUsers = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/admin/users', {
@@ -49,8 +51,31 @@ function AdminDashboard() {
       console.error('Error fetching users:', error)
     }
   }
+  // Get audit logs
+const fetchAuditLogs = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/admin/audit-logs', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setAuditLogs(response.data)
+    } catch (error) {
+      console.error('Error fetching audit logs:', error)
+    }
+  }
 
-  // Logout function
+  const handleCreateUser = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/admin/create-user', newUser, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      alert('User created successfully!')
+      setNewUser({ full_name: '', username: '', email: '', password: '', role: 'officer' })
+      fetchUsers()
+    } catch (error) {
+      alert('Error creating user!')
+    }
+  }
+
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -143,6 +168,66 @@ function AdminDashboard() {
         {/* Users Tab */}
         {activeTab === 'users' && (
           <div className='tab-content'>
+
+            {/* Create User Form */}
+            <div className='create-user-form'>
+              <h3>Create New User</h3>
+              <div className='form-grid'>
+                <div className='form-group'>
+                  <label>Full Name</label>
+                  <input
+                    type='text'
+                    placeholder='Enter full name'
+                    value={newUser.full_name}
+                    onChange={(e) => setNewUser({...newUser, full_name: e.target.value})}
+                  />
+                </div>
+                <div className='form-group'>
+                  <label>Username</label>
+                  <input
+                    type='text'
+                    placeholder='Enter username'
+                    value={newUser.username}
+                    onChange={(e) => setNewUser({...newUser, username: e.target.value})}
+                  />
+                </div>
+                <div className='form-group'>
+                  <label>Email</label>
+                  <input
+                    type='email'
+                    placeholder='Enter email'
+                    value={newUser.email}
+                    onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                  />
+                </div>
+                <div className='form-group'>
+                  <label>Password</label>
+                  <input
+                    type='password'
+                    placeholder='Enter password'
+                    value={newUser.password}
+                    onChange={(e) => setNewUser({...newUser, password: e.target.value})}
+                  />
+                </div>
+                <div className='form-group'>
+                  <label>Role</label>
+                  <select
+                    value={newUser.role}
+                    onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                  >
+                    <option value='officer'>National Registration Officer</option>
+                    <option value='hospital'>Hospital Staff</option>
+
+                    <option value='admin'>Admin</option>
+                  </select>
+                </div>
+              </div>
+              <button className='create-btn' onClick={handleCreateUser}>
+                ➕ Create User
+              </button>
+            </div>
+
+            {/* Users Table */}
             <table className='data-table'>
               <thead>
                 <tr>
@@ -171,18 +256,68 @@ function AdminDashboard() {
         )}
 
         {/* Audit Tab */}
-        {activeTab === 'audit' && (
-          <div className='tab-content'>
-            <p className='coming-soon'>📋 Audit logs will appear here</p>
-          </div>
+{activeTab === 'audit' && (
+  <div className='tab-content'>
+    <h3 className='section-title'>System Audit Logs</h3>
+    <table className='data-table'>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Table</th>
+          <th>Details</th>
+          <th>Date & Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {auditLogs.length === 0 ? (
+          <tr>
+            <td colSpan='6' style={{textAlign: 'center', padding: '30px', color: '#888'}}>
+              No audit logs yet
+            </td>
+          </tr>
+        ) : (
+          auditLogs.map(log => (
+            <tr key={log.id}>
+              <td>{log.id}</td>
+              <td>{log.user_id}</td>
+              <td>{log.action}</td>
+              <td>{log.table_name}</td>
+              <td>{log.details}</td>
+              <td>{new Date(log.created_at).toLocaleString()}</td>
+            </tr>
+          ))
         )}
+      </tbody>
+    </table>
+  </div>
+)}
 
         {/* Reports Tab */}
-        {activeTab === 'reports' && (
-          <div className='tab-content'>
-            <p className='coming-soon'>📈 Reports will appear here</p>
-          </div>
-        )}
+{activeTab === 'reports' && (
+  <div className='tab-content'>
+    <h3 className='section-title'>System Reports</h3>
+    <div className='reports-grid'>
+      <div className='report-card'>
+        <h4>👥 Total Citizens Registered</h4>
+        <p className='report-number green'>{stats.totalCitizens}</p>
+      </div>
+      <div className='report-card'>
+        <h4>🏛️ Total System Users</h4>
+        <p className='report-number orange'>{stats.totalUsers}</p>
+      </div>
+      <div className='report-card'>
+        <h4>🍼 Total Birth Records</h4>
+        <p className='report-number black'>{stats.totalBirths}</p>
+      </div>
+      <div className='report-card'>
+        <h4>💀 Total Death Records</h4>
+        <p className='report-number green'>{stats.totalDeaths}</p>
+      </div>
+    </div>
+  </div>
+)}
 
       </div>
     </div>
